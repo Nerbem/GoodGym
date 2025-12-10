@@ -50,7 +50,6 @@ fun SubscriptionScreen(
 ) {
     var selectedPlan by remember { mutableStateOf<String?>(null) }
     val registrationState by authViewModel.registrationState.collectAsState()
-    var debugInfoText by remember { mutableStateOf("") }
 
     LaunchedEffect(registrationState) {
         if (registrationState is AuthResult.Success) {
@@ -98,18 +97,6 @@ fun SubscriptionScreen(
                     Button(
                         onClick = { 
                             selectedPlan?.let { plan ->
-                                // Construimos el mensaje de depuración
-                                debugInfoText = """
-                                    Enviando al servidor:
-                                    - Nombre: $nombre
-                                    - Apellido: $apellido
-                                    - Edad: $edad
-                                    - Email: $email
-                                    - Contraseña: $password
-                                    - Plan: $plan
-                                """.trimIndent()
-                                
-                                // Y luego llamamos a la función de registro
                                 authViewModel.register(nombre, apellido, edad, email, password, plan)
                             }
                         },
@@ -120,16 +107,6 @@ fun SubscriptionScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                // Mostramos el mensaje de depuración si no está vacío
-                if (debugInfoText.isNotEmpty()) {
-                    Text(
-                        text = debugInfoText,
-                        color = Color.Green,
-                        fontSize = 14.sp,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-
                 when (val state = registrationState) {
                     is AuthResult.Loading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     is AuthResult.Error -> Text(text = state.message ?: "Error desconocido", color = Color.Red, modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -146,11 +123,11 @@ private fun PlanSquare(text: String, isSelected: Boolean, onClick: () -> Unit) {
         modifier = Modifier
             .size(120.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(if (isSelected) Color.DarkGray else Color.White.copy(alpha = 0.8f))
+            .background(if (isSelected) Color.DarkGray else Color.DarkGray.copy(alpha = 0.8f))
             .border(2.dp, if (isSelected) Color.White else Color.Transparent, RoundedCornerShape(16.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, color = if (isSelected) Color.Black else Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }

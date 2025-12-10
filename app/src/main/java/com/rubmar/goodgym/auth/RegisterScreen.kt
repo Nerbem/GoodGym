@@ -108,15 +108,12 @@ private fun CustomTextField(
     onValueChange: (String) -> Unit,
     placeholder: String,
     isPassword: Boolean = false,
-    isError: Boolean = false, // Nuevo parámetro
+    isError: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Text
 ) {
     Box(
         contentAlignment = Alignment.CenterStart, 
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .border(if (isError) 2.dp else 0.dp, if (isError) Color.Red else Color.Transparent) // Borde rojo si hay error
+        modifier = Modifier.fillMaxWidth().height(56.dp).border(if (isError) 2.dp else 0.dp, if (isError) Color.Red else Color.Transparent)
     ) {
         Image(painter = painterResource(id = R.drawable.textfield_background), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier.fillMaxSize())
         BasicTextField(

@@ -93,7 +93,7 @@ fun EditProfileScreen(
             Button(
                 onClick = { navController.popBackStack() },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
+                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
             ) {
                 Text("Cancelar")
             }
@@ -104,7 +104,7 @@ fun EditProfileScreen(
                     }
                 },
                 modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
             ) {
                 Text("Guardar Cambios")
             }
