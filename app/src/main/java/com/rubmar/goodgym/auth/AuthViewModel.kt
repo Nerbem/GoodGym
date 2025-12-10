@@ -23,11 +23,11 @@ class AuthViewModel(
         }
     }
 
-    fun register(email: String, password: String, confirmPassword: String, nombre: String, apellido: String, edad: String) {
+    fun register(nombre: String, apellido: String, edad: String, email: String, password: String, plan: String) {
         viewModelScope.launch {
             _registrationState.value = AuthResult.Loading
             val ageAsInt = edad.toIntOrNull() ?: 0
-            val result = repo.register(email, password, confirmPassword, nombre, apellido, ageAsInt)
+            val result = repo.register(nombre, apellido, ageAsInt, email, password, plan)
             _registrationState.value = result
         }
     }

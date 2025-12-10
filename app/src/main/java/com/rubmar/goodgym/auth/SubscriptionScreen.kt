@@ -46,18 +46,15 @@ fun SubscriptionScreen(
     apellido: String, 
     edad: String, 
     email: String, 
-    password: String,
-    confirmPassword: String
+    password: String
 ) {
     var selectedPlan by remember { mutableStateOf<String?>(null) }
     val registrationState by authViewModel.registrationState.collectAsState()
+    var debugInfoText by remember { mutableStateOf("") }
 
     LaunchedEffect(registrationState) {
         if (registrationState is AuthResult.Success) {
-            // Navegamos al login y limpiamos todo el historial para que no se pueda volver atrás
-            navController.navigate("login") { 
-                popUpTo(0) 
-            }
+            navController.navigate("login") { popUpTo(0) }
             authViewModel.resetRegistrationState()
         }
     }
@@ -70,19 +67,16 @@ fun SubscriptionScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header
             Box(modifier = Modifier.fillMaxWidth().height(125.dp), contentAlignment = Alignment.Center) {
                 Image(painter = painterResource(id = R.drawable.header_background), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
                 Text(text = "Elige tu Plan", color = Color.White, fontSize = 32.sp, fontWeight = FontWeight.Bold)
             }
 
-            // Contenido central
             Column(
                 modifier = Modifier.weight(1f).padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Cuadrados de selección
                 Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     PlanSquare(text = "Básico", isSelected = selectedPlan == "Básico") { selectedPlan = "Básico" }
                     PlanSquare(text = "Estándar", isSelected = selectedPlan == "Estándar") { selectedPlan = "Estándar" }
@@ -95,7 +89,6 @@ fun SubscriptionScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Botones
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                     Button(
                         onClick = { navController.popBackStack() },
@@ -104,7 +97,21 @@ fun SubscriptionScreen(
                     ) { Text("Volver") }
                     Button(
                         onClick = { 
-                            authViewModel.register(email, password, confirmPassword, nombre, apellido, edad) 
+                            selectedPlan?.let { plan ->
+                                // Construimos el mensaje de depuración
+                                debugInfoText = """
+                                    Enviando al servidor:
+                                    - Nombre: $nombre
+                                    - Apellido: $apellido
+                                    - Edad: $edad
+                                    - Email: $email
+                                    - Contraseña: $password
+                                    - Plan: $plan
+                                """.trimIndent()
+                                
+                                // Y luego llamamos a la función de registro
+                                authViewModel.register(nombre, apellido, edad, email, password, plan)
+                            }
                         },
                         enabled = selectedPlan != null,
                         modifier = Modifier.weight(1f),
@@ -113,7 +120,16 @@ fun SubscriptionScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 
-                 // Estado
+                // Mostramos el mensaje de depuración si no está vacío
+                if (debugInfoText.isNotEmpty()) {
+                    Text(
+                        text = debugInfoText,
+                        color = Color.Green,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(vertical = 8.dp)
+                    )
+                }
+
                 when (val state = registrationState) {
                     is AuthResult.Loading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
                     is AuthResult.Error -> Text(text = state.message ?: "Error desconocido", color = Color.Red, modifier = Modifier.align(Alignment.CenterHorizontally))

@@ -66,14 +66,13 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
             InfoScreen(navController = navController)
         }
         composable(
-            "subscription/{nombre}/{apellido}/{edad}/{email}/{password}/{confirmPassword}",
+            "subscription/{nombre}/{apellido}/{edad}/{email}/{password}",
             arguments = listOf(
                 navArgument("nombre") { type = NavType.StringType },
                 navArgument("apellido") { type = NavType.StringType },
                 navArgument("edad") { type = NavType.StringType },
                 navArgument("email") { type = NavType.StringType },
                 navArgument("password") { type = NavType.StringType },
-                navArgument("confirmPassword") { type = NavType.StringType },
             )
         ) { backStackEntry ->
             SubscriptionScreen(
@@ -83,8 +82,7 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
                 apellido = backStackEntry.arguments?.getString("apellido") ?: "",
                 edad = backStackEntry.arguments?.getString("edad") ?: "",
                 email = backStackEntry.arguments?.getString("email") ?: "",
-                password = backStackEntry.arguments?.getString("password") ?: "",
-                confirmPassword = backStackEntry.arguments?.getString("confirmPassword") ?: ""
+                password = backStackEntry.arguments?.getString("password") ?: ""
             )
         }
         composable(
