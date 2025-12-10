@@ -26,6 +26,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +48,7 @@ import com.rubmar.goodgym.R
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(navController: NavController, userName: String?) {
+fun HomeScreen(navController: NavController, userId: String?, userName: String?) {
     var selectedOption by remember { mutableStateOf<String?>(null) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -57,13 +58,25 @@ fun HomeScreen(navController: NavController, userName: String?) {
         drawerContent = {
             ModalDrawerSheet {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Menú Desplegable", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "Menú", fontSize = 24.sp, fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.height(32.dp))
+                    TextButton(onClick = { 
+                        scope.launch { drawerState.close() }
+                        navController.navigate("user_list")
+                    }) {
+                        Text("Ver Usuarios", fontSize = 18.sp)
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextButton(onClick = { 
+                        scope.launch { drawerState.close() }
+                        navController.navigate("profile_settings/$userId")
+                    }) {
+                        Text("Ajustes", fontSize = 18.sp)
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
                     Button(onClick = { scope.launch { drawerState.close() } }) {
                         Text("Cerrar Menú")
                     }
@@ -72,12 +85,7 @@ fun HomeScreen(navController: NavController, userName: String?) {
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                painter = painterResource(id = R.drawable.background_image),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
+            Image(painter = painterResource(id = R.drawable.background_image), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
             Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
 
             Column(
@@ -88,17 +96,8 @@ fun HomeScreen(navController: NavController, userName: String?) {
                     modifier = Modifier.fillMaxWidth().height(150.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.header_background),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.user_avatar),
-                        contentDescription = "Avatar de usuario",
-                        modifier = Modifier.size(100.dp).offset(y = 30.dp)
-                    )
+                    Image(painter = painterResource(id = R.drawable.header_background), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                    Image(painter = painterResource(id = R.drawable.user_avatar), contentDescription = "Avatar de usuario", modifier = Modifier.size(100.dp).offset(y = 30.dp))
                     Text(
                         text = "¡Hola, ${userName ?: "Usuario"}!",
                         color = Color.White,

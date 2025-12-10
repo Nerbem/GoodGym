@@ -16,11 +16,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.rubmar.goodgym.auth.AuthViewModel
+import com.rubmar.goodgym.auth.EditProfileScreen
 import com.rubmar.goodgym.auth.HomeScreen
 import com.rubmar.goodgym.auth.InfoScreen
 import com.rubmar.goodgym.auth.LoginScreen
+import com.rubmar.goodgym.auth.ProfileSettingsScreen
 import com.rubmar.goodgym.auth.RegisterScreen
 import com.rubmar.goodgym.auth.SubscriptionScreen
+import com.rubmar.goodgym.auth.UserListScreen
 import com.rubmar.goodgym.ui.theme.GoodGymTheme
 
 class MainActivity : ComponentActivity() {
@@ -51,16 +54,10 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         composable("login") {
-            LoginScreen(
-                navController = navController,
-                authViewModel = authViewModel
-            )
+            LoginScreen(navController = navController, authViewModel = authViewModel)
         }
         composable("register") {
-            RegisterScreen(
-                navController = navController,
-                authViewModel = authViewModel
-            )
+            RegisterScreen(navController = navController, authViewModel = authViewModel)
         }
         composable("info") {
             InfoScreen(navController = navController)
@@ -86,12 +83,39 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
             )
         }
         composable(
-            "home/{userName}",
-            arguments = listOf(navArgument("userName") { type = NavType.StringType })
+            "home/{userId}/{userName}",
+            arguments = listOf(
+                navArgument("userId") { type = NavType.StringType },
+                navArgument("userName") { type = NavType.StringType }
+            )
         ) { backStackEntry ->
             HomeScreen(
                 navController = navController,
+                userId = backStackEntry.arguments?.getString("userId"),
                 userName = backStackEntry.arguments?.getString("userName")
+            )
+        }
+        composable("user_list") {
+            UserListScreen(navController = navController, authViewModel = authViewModel)
+        }
+        composable(
+            "profile_settings/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ProfileSettingsScreen(
+                navController = navController,
+                authViewModel = authViewModel,
+                userId = backStackEntry.arguments?.getString("userId")
+            )
+        }
+        composable(
+            "edit_profile/{userId}",
+            arguments = listOf(navArgument("userId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            EditProfileScreen(
+                navController = navController,
+                authViewModel = authViewModel,
+                userId = backStackEntry.arguments?.getString("userId")
             )
         }
     }

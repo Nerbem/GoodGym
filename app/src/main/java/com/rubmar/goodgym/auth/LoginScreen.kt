@@ -50,8 +50,8 @@ fun LoginScreen(
 
     LaunchedEffect(state) {
         if (state is AuthResult.Success) {
-            val userName = (state as AuthResult.Success<User>).data.nombre
-            navController.navigate("home/$userName") { 
+            val user = (state as AuthResult.Success<User>).data
+            navController.navigate("home/${user.id}/${user.nombre}") { 
                 popUpTo(0)
             }
             authViewModel.resetAuthState()
@@ -59,35 +59,17 @@ fun LoginScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(id = R.drawable.background_image),
-            contentDescription = "Imagen de fondo",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
+        Image(painter = painterResource(id = R.drawable.background_image), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
 
         Box(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier.align(Alignment.TopCenter).fillMaxWidth(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.header_background),
-                    contentDescription = "Fondo de cabecera",
-                    modifier = Modifier.fillMaxWidth(),
-                    contentScale = ContentScale.FillWidth
-                )
+                Image(painter = painterResource(id = R.drawable.header_background), contentDescription = null, modifier = Modifier.fillMaxWidth(), contentScale = ContentScale.FillWidth)
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Logo de la app",
-                        modifier = Modifier.size(300.dp)
-                    )
-                    Image(
-                        painter = painterResource(id = R.drawable.user_avatar),
-                        contentDescription = "Avatar de usuario",
-                        modifier = Modifier.offset(y = (-80).dp).size(120.dp)
-                    )
+                    Image(painter = painterResource(id = R.drawable.logo), contentDescription = null, modifier = Modifier.size(300.dp))
+                    Image(painter = painterResource(id = R.drawable.user_avatar), contentDescription = null, modifier = Modifier.offset(y = (-80).dp).size(120.dp))
                 }
             }
 
@@ -105,18 +87,12 @@ fun LoginScreen(
                     Button(
                         onClick = { authViewModel.login(email.trim(), password) }, 
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.DarkGray,
-                            contentColor = Color.White
-                        )
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
                     ) { Text("Iniciar sesión") }
                     Button(
                         onClick = { navController.navigate("register") }, 
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.DarkGray,
-                            contentColor = Color.White
-                        )
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
                     ) { Text("Registro") }
                 }
                 Spacer(Modifier.height(16.dp))
@@ -131,11 +107,7 @@ fun LoginScreen(
             Image(
                 painter = painterResource(id = R.drawable.info_button),
                 contentDescription = "Información",
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-                    .size(48.dp)
-                    .clickable { navController.navigate("info") }
+                modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).size(48.dp).clickable { navController.navigate("info") }
             )
         }
     }
@@ -149,12 +121,7 @@ private fun CustomLoginTextField(
     isPassword: Boolean = false
 ) {
     Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-        Image(
-            painter = painterResource(id = R.drawable.textfield_background),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
-        )
+        Image(painter = painterResource(id = R.drawable.textfield_background), contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier.fillMaxSize())
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
