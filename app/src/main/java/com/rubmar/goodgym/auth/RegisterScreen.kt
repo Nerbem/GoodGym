@@ -1,0 +1,153 @@
+package com.rubmar.goodgym.auth
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.rubmar.goodgym.R
+
+@Composable
+fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel) {
+    var nombre by remember { mutableStateOf("") }
+    var apellido by remember { mutableStateOf("") }
+    var edad by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Fondo
+        Image(
+            painter = painterResource(id = R.drawable.background_image),
+            contentDescription = "Imagen de fondo",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+        // Capa de oscurecimiento
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header
+            Box(modifier = Modifier.fillMaxWidth().height(125.dp), contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(id = R.drawable.header_background),
+                    contentDescription = "Fondo de cabecera",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "Registro", 
+                    color = Color.White, 
+                    fontSize = 32.sp, 
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.offset(y = 30.dp)
+                )
+            }
+            
+            // Formulario
+            Column(modifier = Modifier.padding(32.dp)) {
+                CustomTextField(value = nombre, onValueChange = { nombre = it }, placeholder = "Nombre")
+                Spacer(Modifier.height(8.dp))
+                CustomTextField(value = apellido, onValueChange = { apellido = it }, placeholder = "Apellido")
+                Spacer(Modifier.height(8.dp))
+                CustomTextField(value = edad, onValueChange = { edad = it }, placeholder = "Edad", keyboardType = KeyboardType.Number)
+                Spacer(Modifier.height(8.dp))
+                CustomTextField(value = email, onValueChange = { email = it }, placeholder = "Email")
+                Spacer(Modifier.height(8.dp))
+                CustomTextField(value = password, onValueChange = { password = it }, placeholder = "Contraseña", isPassword = true)
+                Spacer(Modifier.height(8.dp))
+                CustomTextField(value = confirmPassword, onValueChange = { confirmPassword = it }, placeholder = "Confirmar Contraseña", isPassword = true)
+                
+                Spacer(Modifier.height(24.dp))
+
+                // Botones
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
+                    ) { Text("Volver") }
+                    Button(
+                        onClick = { 
+                            navController.navigate("subscription/$nombre/$apellido/$edad/$email/$password/$confirmPassword") 
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
+                    ) { Text("Continuar") }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    isPassword: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text
+) {
+    Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.fillMaxWidth().height(56.dp)) {
+        Image(
+            painter = painterResource(id = R.drawable.textfield_background),
+            contentDescription = null,
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier.fillMaxSize()
+        )
+        BasicTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            singleLine = true,
+            // Aquí nos aseguramos de que el color del texto sea blanco
+            textStyle = TextStyle(color = Color.White, fontSize = 16.sp),
+            cursorBrush = SolidColor(Color.White),
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType)
+        )
+        if (value.isEmpty()) {
+            Text(text = placeholder, color = Color.White.copy(alpha = 0.7f), modifier = Modifier.padding(horizontal = 16.dp))
+        }
+    }
+}
