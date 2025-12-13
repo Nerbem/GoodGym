@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -93,18 +92,29 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                    modifier = Modifier.fillMaxWidth().height(150.dp),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxWidth().height(200.dp), // Aumentamos un poco la altura del header
+                    contentAlignment = Alignment.TopCenter // Alineamos el contenido a la parte superior
                 ) {
                     Image(painter = painterResource(id = R.drawable.header_background), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
-                    Image(painter = painterResource(id = R.drawable.user_avatar), contentDescription = "Avatar de usuario", modifier = Modifier.size(100.dp).offset(y = 30.dp))
-                    Text(
-                        text = "¡Hola, ${userName ?: "Usuario"}!",
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp)
-                    )
+                    
+                    // Columna para agrupar nombre y avatar, con padding para bajarla
+                    Column(
+                        modifier = Modifier.padding(top = 32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "¡Hola, ${userName ?: "Usuario"}!",
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.user_avatar),
+                            contentDescription = "Avatar de usuario",
+                            modifier = Modifier.size(100.dp)
+                        )
+                    }
                 }
 
                 Column(
@@ -134,7 +144,7 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
             
             IconButton(
                 onClick = { scope.launch { drawerState.open() } },
-                modifier = Modifier.align(Alignment.TopStart).padding(16.dp)
+                modifier = Modifier.align(Alignment.TopStart).padding(top = 32.dp, start = 16.dp)
             ) {
                 Icon(imageVector = Icons.Default.Menu, contentDescription = "Menú", tint = Color.White)
             }
@@ -145,14 +155,9 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
 @Composable
 private fun OptionSquare(text: String, isSelected: Boolean, onClick: () -> Unit) {
     Box(
-        modifier = Modifier
-            .size(120.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .background(if (isSelected) Color.DarkGray else Color.White.copy(alpha = 0.8f))
-            .border(2.dp, if (isSelected) Color.White else Color.Transparent, RoundedCornerShape(16.dp))
-            .clickable { onClick() },
+        modifier = Modifier.size(120.dp).clip(RoundedCornerShape(16.dp)).background(if (isSelected) Color.DarkGray else Color.DarkGray.copy(alpha = 0.8f)).border(2.dp, if (isSelected) Color.White else Color.Transparent, RoundedCornerShape(16.dp)).clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, color = if (isSelected) Color.Black else Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Text(text = text, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }
