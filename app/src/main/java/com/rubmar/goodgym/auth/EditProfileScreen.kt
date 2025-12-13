@@ -1,6 +1,7 @@
 package com.rubmar.goodgym.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -66,54 +68,71 @@ fun EditProfileScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "Editar Perfil", fontSize = 24.sp, color = Color.White)
-        Spacer(Modifier.height(32.dp))
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(painter = painterResource(id = R.drawable.background_image), contentDescription = null, modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+        Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
 
-        CustomEditTextField(value = nombre, onValueChange = { nombre = it }, placeholder = "Nombre")
-        Spacer(Modifier.height(8.dp))
-        CustomEditTextField(value = apellido, onValueChange = { apellido = it }, placeholder = "Apellido")
-        Spacer(Modifier.height(8.dp))
-        CustomEditTextField(value = edad, onValueChange = { edad = it }, placeholder = "Edad", keyboardType = KeyboardType.Number)
-        Spacer(Modifier.height(8.dp))
-        CustomEditTextField(value = email, onValueChange = { email = it }, placeholder = "Email")
-        Spacer(Modifier.height(8.dp))
-        CustomEditTextField(value = password, onValueChange = { password = it }, placeholder = "Nueva Contraseña (opcional)", isPassword = true)
-
-        Spacer(Modifier.height(24.dp))
-
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Button(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
-            ) {
-                Text("Cancelar")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(modifier = Modifier.fillMaxWidth().height(75.dp), contentAlignment = Alignment.Center) {
+                Image(
+                    painter = painterResource(id = R.drawable.header_background),
+                    contentDescription = "Fondo de cabecera",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+                Text(
+                    text = "Editar Perfil", 
+                    color = Color.White, 
+                    fontSize = 32.sp, 
+                    fontWeight = FontWeight.Bold
+                )
             }
-            Button(
-                onClick = {
-                    if (userId != null) {
-                        authViewModel.updateUser(userId, nombre, apellido, edad, email, password, plan)
+            
+            Column(modifier = Modifier.padding(32.dp)) {
+                CustomEditTextField(value = nombre, onValueChange = { nombre = it }, placeholder = "Nombre")
+                Spacer(Modifier.height(8.dp))
+                CustomEditTextField(value = apellido, onValueChange = { apellido = it }, placeholder = "Apellido")
+                Spacer(Modifier.height(8.dp))
+                CustomEditTextField(value = edad, onValueChange = { edad = it }, placeholder = "Edad", keyboardType = KeyboardType.Number)
+                Spacer(Modifier.height(8.dp))
+                CustomEditTextField(value = email, onValueChange = { email = it }, placeholder = "Email")
+                Spacer(Modifier.height(8.dp))
+                CustomEditTextField(value = password, onValueChange = { password = it }, placeholder = "Nueva Contraseña (opcional)", isPassword = true)
+
+                Spacer(Modifier.height(24.dp))
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
+                    ) {
+                        Text("Cancelar")
                     }
-                },
-                modifier = Modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
-            ) {
-                Text("Guardar Cambios")
-            }
-        }
+                    Button(
+                        onClick = {
+                            if (userId != null) {
+                                authViewModel.updateUser(userId, nombre, apellido, edad, email, password, plan)
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
+                    ) {
+                        Text("Guardar Cambios")
+                    }
+                }
 
-        when (val state = updateUserState) {
-            is AuthResult.Loading -> CircularProgressIndicator()
-            is AuthResult.Error -> Text(text = state.message ?: "Error", color = Color.Red)
-            else -> {}
+                when (val state = updateUserState) {
+                    is AuthResult.Loading -> CircularProgressIndicator()
+                    is AuthResult.Error -> Text(text = state.message ?: "Error", color = Color.Red)
+                    else -> {}
+                }
+            }
         }
     }
 }
