@@ -200,7 +200,10 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        OptionImageButton(imageRes = R.drawable.btn_reservas, isSelected = selectedOption == "Reservas") { selectedOption = "Reservas" }
+                        OptionImageButton(imageRes = R.drawable.btn_reservas, isSelected = selectedOption == "Reservas") { 
+                            selectedOption = "Reservas"
+                            navController.navigate("reservas")
+                        }
                         OptionImageButton(imageRes = R.drawable.btn_clases, isSelected = selectedOption == "Clases") { selectedOption = "Clases" }
                     }
                     Spacer(modifier = Modifier.height(16.dp))

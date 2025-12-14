@@ -23,6 +23,7 @@ import com.rubmar.goodgym.auth.LoginScreen
 import com.rubmar.goodgym.auth.ProfileSettingsScreen
 import com.rubmar.goodgym.auth.RegisterScreen
 import com.rubmar.goodgym.auth.RequestCardScreen
+import com.rubmar.goodgym.auth.ReservasScreen
 import com.rubmar.goodgym.auth.SubscriptionScreen
 import com.rubmar.goodgym.auth.UserListScreen
 import com.rubmar.goodgym.ui.theme.GoodGymTheme
@@ -121,6 +122,9 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
         }
         composable("request_card") {
             RequestCardScreen(navController = navController, authViewModel = authViewModel)
+        }
+        composable("reservas") {
+            ReservasScreen(navController = navController)
         }
     }
 }
