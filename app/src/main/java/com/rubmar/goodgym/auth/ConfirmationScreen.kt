@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -48,10 +45,9 @@ fun ConfirmationScreen(navController: NavController, timeSlot: String?) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
+            Image(
+                painter = painterResource(id = R.drawable.ic_confirmation_check),
                 contentDescription = "Confirmado",
-                tint = Color.Green,
                 modifier = Modifier.size(100.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -71,7 +67,6 @@ fun ConfirmationScreen(navController: NavController, timeSlot: String?) {
             Spacer(modifier = Modifier.height(48.dp))
             Button(
                 onClick = { 
-                    // Vuelve a la pantalla Home, eliminando las de Reservas y Confirmación del historial
                     navController.popBackStack("reservas", inclusive = true) 
                 },
                 modifier = Modifier.fillMaxWidth(),

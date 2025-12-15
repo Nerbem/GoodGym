@@ -11,11 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -53,10 +50,9 @@ fun ClassConfirmationScreen(navController: NavController, className: String?, ti
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.CheckCircle,
+            Image(
+                painter = painterResource(id = R.drawable.ic_confirmation_check),
                 contentDescription = "Confirmado",
-                tint = Color.Green,
                 modifier = Modifier.size(100.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
