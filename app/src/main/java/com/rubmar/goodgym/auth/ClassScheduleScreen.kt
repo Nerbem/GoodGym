@@ -1,51 +1,36 @@
 package com.rubmar.goodgym.auth
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.rubmar.goodgym.R
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
-fun ReservasScreen(navController: NavController) {
-    val context = LocalContext.current
-    val timeSlots = listOf(
-        "10:00 a 11:00",
-        "11:00 a 12:00",
-        "12:00 a 13:00",
-        "13:00 a 14:00",
-        "13:00 a 15:00",
-        "15:00 a 16:00",
-        "17:00 a 18:00",
-        "18:00 a 19:00"
-    )
+fun ClassScheduleScreen(navController: NavController, className: String?) {
+    val timeSlots = listOf("09:00 - 10:00", "15:00 - 16:00", "19:00 - 20:00")
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -61,7 +46,7 @@ fun ReservasScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Horas Disponibles",
+                text = "Horarios para ${className ?: "Clase"}",
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -74,41 +59,15 @@ fun ReservasScreen(navController: NavController) {
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(timeSlots) { time ->
-                    Row(
+                    Button(
+                        onClick = {
+                            val encodedTime = URLEncoder.encode(time, StandardCharsets.UTF_8.toString())
+                            navController.navigate("class_confirmation/${className ?: "Clase"}/$encodedTime")
+                        },
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray, contentColor = Color.White)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .weight(2f)
-                                .height(90.dp)
-                                .clip(RoundedCornerShape(8.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.time_slot_background),
-                                contentDescription = "Fondo de la hora",
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
-                            Text(
-                                text = time.replace(" a ", "\n"),
-                                color = Color.White,
-                                textAlign = TextAlign.Center,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                        Button(
-                            onClick = { 
-                                navController.navigate("confirmation/$time")
-                            },
-                            modifier = Modifier.weight(1f),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black, contentColor = Color.White)
-                        ) {
-                            Text("Asistir")
-                        }
+                        Text(time, fontSize = 18.sp)
                     }
                 }
             }

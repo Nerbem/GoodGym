@@ -76,6 +76,8 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
             ) {
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(painter = painterResource(id = R.drawable.drawer_background), contentDescription = "Fondo del menú", modifier = Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+                    Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)))
+
                     Column(
                         modifier = Modifier.fillMaxSize().padding(top = 48.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
                     ) {
@@ -125,6 +127,10 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
                         }
 
                         Spacer(modifier = Modifier.weight(1f))
+                        Button(onClick = { navController.navigate("login") { popUpTo(0) } }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Cerrar Sesión")
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
                         Button(onClick = { scope.launch { drawerState.close() } }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
                             Text("Cerrar Menú")
                         }
@@ -204,12 +210,21 @@ fun HomeScreen(navController: NavController, userId: String?, userName: String?)
                             selectedOption = "Reservas"
                             navController.navigate("reservas")
                         }
-                        OptionImageButton(imageRes = R.drawable.btn_clases, isSelected = selectedOption == "Clases") { selectedOption = "Clases" }
+                        OptionImageButton(imageRes = R.drawable.btn_clases, isSelected = selectedOption == "Clases") { 
+                            selectedOption = "Clases"
+                            navController.navigate("clases")
+                        }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        OptionImageButton(imageRes = R.drawable.btn_entrenamiento_personalizado, isSelected = selectedOption == "Entrenamiento personalizado") { selectedOption = "Entrenamiento personalizado" }
-                        OptionImageButton(imageRes = R.drawable.btn_objetivos, isSelected = selectedOption == "Objetivos") { selectedOption = "Objetivos" }
+                        OptionImageButton(imageRes = R.drawable.btn_entrenamiento_personalizado, isSelected = selectedOption == "Entrenamiento personalizado") { 
+                            selectedOption = "Entrenamiento personalizado"
+                            navController.navigate("personalized_training")
+                        }
+                        OptionImageButton(imageRes = R.drawable.btn_objetivos, isSelected = selectedOption == "Objetivos") { 
+                            selectedOption = "Objetivos"
+                            navController.navigate("objectives") 
+                        }
                     }
                 }
 

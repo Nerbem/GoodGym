@@ -16,16 +16,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.rubmar.goodgym.auth.AuthViewModel
+import com.rubmar.goodgym.auth.ClasesScreen
+import com.rubmar.goodgym.auth.ClassConfirmationScreen
+import com.rubmar.goodgym.auth.ClassScheduleScreen
+import com.rubmar.goodgym.auth.ConfirmationScreen
 import com.rubmar.goodgym.auth.EditProfileScreen
 import com.rubmar.goodgym.auth.HomeScreen
 import com.rubmar.goodgym.auth.InfoScreen
 import com.rubmar.goodgym.auth.LoginScreen
+import com.rubmar.goodgym.auth.ObjectivesScreen
+import com.rubmar.goodgym.auth.PersonalizedTrainingScreen
 import com.rubmar.goodgym.auth.ProfileSettingsScreen
 import com.rubmar.goodgym.auth.RegisterScreen
 import com.rubmar.goodgym.auth.RequestCardScreen
 import com.rubmar.goodgym.auth.ReservasScreen
 import com.rubmar.goodgym.auth.SubscriptionScreen
 import com.rubmar.goodgym.auth.UserListScreen
+import com.rubmar.goodgym.auth.VariationsScreen
 import com.rubmar.goodgym.ui.theme.GoodGymTheme
 
 class MainActivity : ComponentActivity() {
@@ -125,6 +132,49 @@ fun AuthNavigation(modifier: Modifier = Modifier) {
         }
         composable("reservas") {
             ReservasScreen(navController = navController)
+        }
+        composable(
+            "confirmation/{timeSlot}",
+            arguments = listOf(navArgument("timeSlot") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ConfirmationScreen(
+                navController = navController,
+                timeSlot = backStackEntry.arguments?.getString("timeSlot")
+            )
+        }
+        composable("clases") {
+            ClasesScreen(navController = navController)
+        }
+        composable(
+            "class_schedule/{className}",
+            arguments = listOf(navArgument("className") { type = NavType.StringType })
+        ) { backStackEntry ->
+            ClassScheduleScreen(
+                navController = navController,
+                className = backStackEntry.arguments?.getString("className")
+            )
+        }
+        composable(
+            "class_confirmation/{className}/{timeSlot}",
+            arguments = listOf(
+                navArgument("className") { type = NavType.StringType },
+                navArgument("timeSlot") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            ClassConfirmationScreen(
+                navController = navController,
+                className = backStackEntry.arguments?.getString("className"),
+                timeSlot = backStackEntry.arguments?.getString("timeSlot")
+            )
+        }
+        composable("personalized_training") {
+            PersonalizedTrainingScreen(navController = navController)
+        }
+        composable("objectives") {
+            ObjectivesScreen(navController = navController)
+        }
+        composable("variations") {
+            VariationsScreen(navController = navController)
         }
     }
 }
