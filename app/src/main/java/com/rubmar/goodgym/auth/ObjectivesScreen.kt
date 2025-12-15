@@ -40,17 +40,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.rubmar.goodgym.R
 
+data class ObjectivesState(
+    val currentWeight: String = "",
+    val targetWeight: String = "",
+    val weeklyTime: String = "6",
+    val healthCondition: Boolean? = null,
+    val medication: Boolean? = null
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ObjectivesScreen(navController: NavController) {
 
-    var currentWeight by remember { mutableStateOf("") }
-    var targetWeight by remember { mutableStateOf("") }
-    val timeOptions = listOf("6", "9", "12")
-    var weeklyTime by remember { mutableStateOf(timeOptions[0]) }
+    var formState by remember { mutableStateOf(ObjectivesState()) }
     var isTimeExpanded by remember { mutableStateOf(false) }
-    var healthCondition by remember { mutableStateOf<Boolean?>(null) }
-    var medication by remember { mutableStateOf<Boolean?>(null) }
+    val timeOptions = listOf("6", "9", "12")
 
     val textFieldColors = OutlinedTextFieldDefaults.colors(
         unfocusedTextColor = Color.White,
@@ -89,8 +93,8 @@ fun ObjectivesScreen(navController: NavController) {
             )
 
             OutlinedTextField(
-                value = currentWeight,
-                onValueChange = { currentWeight = it },
+                value = formState.currentWeight,
+                onValueChange = { formState = formState.copy(currentWeight = it) },
                 label = { Text("¿Cuánto pesas? (kg)") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -98,8 +102,8 @@ fun ObjectivesScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedTextField(
-                value = targetWeight,
-                onValueChange = { targetWeight = it },
+                value = formState.targetWeight,
+                onValueChange = { formState = formState.copy(targetWeight = it) },
                 label = { Text("¿Cuál es tu peso objetivo? (kg)") },
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -112,7 +116,7 @@ fun ObjectivesScreen(navController: NavController) {
                 onExpandedChange = { isTimeExpanded = !isTimeExpanded }
             ) {
                 OutlinedTextField(
-                    value = "$weeklyTime horas",
+                    value = "${formState.weeklyTime} horas",
                     onValueChange = {},
                     readOnly = true,
                     label = { Text("¿Tiempo a la semana?") },
@@ -128,7 +132,7 @@ fun ObjectivesScreen(navController: NavController) {
                         DropdownMenuItem(
                             text = { Text("$option horas") },
                             onClick = {
-                                weeklyTime = option
+                                formState = formState.copy(weeklyTime = option)
                                 isTimeExpanded = false
                             }
                         )
@@ -140,16 +144,16 @@ fun ObjectivesScreen(navController: NavController) {
 
             YesNoSelector(
                 question = "¿Alguna condición física o de salud?",
-                selectedOption = healthCondition,
-                onOptionSelected = { healthCondition = it }
+                selectedOption = formState.healthCondition,
+                onOptionSelected = { formState = formState.copy(healthCondition = it) }
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
             YesNoSelector(
                 question = "¿Tomas alguna medicación?",
-                selectedOption = medication,
-                onOptionSelected = { medication = it }
+                selectedOption = formState.medication,
+                onOptionSelected = { formState = formState.copy(medication = it) }
             )
 
             Spacer(modifier = Modifier.weight(1f))
